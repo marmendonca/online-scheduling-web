@@ -1,0 +1,29 @@
+<div class="container">
+  <form [formGroup]="customerForm">
+    <div class="fields-customer">
+      <mat-form-field class="form-customer-full-width">
+        <mat-label>Celular:</mat-label>
+        <input type="tel" matInput placeholder="85999887766" formControlName="phone">
+        <mat-icon matSuffix (click)="onSearchClick()">search</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="showAdditionalFields" class="fields-customer">
+      <mat-form-field class="form-customer-full-width">
+        <mat-label>Nome:</mat-label>
+        <input matInput placeholder="João da Silva" formControlName="name">
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-customer-full-width">
+        <mat-label>Email:</mat-label>
+        <input type="email" matInput placeholder="" formControlName="email">
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="showAdditionalFields">
+      <div class="button">
+        <button mat-flat-button>Próximo</button>
+      </div>
+    </div>
+  </form>
+</div>

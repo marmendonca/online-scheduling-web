@@ -1,0 +1,24 @@
+.fields-customer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  width: 100%;
+  gap: 12px;
+}
+
+.fields-customer-full-width {
+  width: 100%;
+}
+
+.button {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-icon {
+  cursor: pointer;
+}

@@ -1,0 +1,12 @@
+<div class="main">
+  <div class="home-image" *ngIf="!loaded"></div>
+
+  <ng-container *ngIf="loaded">
+    <div class="header">
+      <div class="image"></div>
+    </div>
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </ng-container>
+</div>
