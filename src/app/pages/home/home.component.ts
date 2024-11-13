@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { CustomerService } from '../services/customer.service';
 import { ToastrService } from 'ngx-toastr';
-import { Customer } from '../../entities/Customer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +31,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private router: Router) {
     this.customerForm = new FormGroup({
       phone: new FormControl('', Validators.required),
       name: new FormControl('', Validators.required),
@@ -50,5 +51,9 @@ export class HomeComponent implements OnInit {
 
       this.showAdditionalFields = true;
     });
+  }
+
+  onNextClick() {
+    this.router.navigate(['/scheduling']);
   }
 }

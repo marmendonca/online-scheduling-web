@@ -1,0 +1,20 @@
+<div class="container">
+  <mat-form-field class="forms-select">
+    <mat-label>Serviços</mat-label>
+    <mat-select [(ngModel)]="selectedService">
+      <mat-option *ngFor="let service of services" [value]="service">
+        {{ service.name }} - {{ service.value | currency }} - Tempo de finalização: {{ service.completionTime }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="showAdditionalFields" class="forms-select">
+    <mat-form-field class="forms-select">
+      <mat-label>Selecione um professional</mat-label>
+      <mat-select [(ngModel)]="selectedProfessional" (openedChange)="onServiceSelect()">
+        <mat-option *ngFor="let professional of professionals" [value]="professional" >
+          {{ professional.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
