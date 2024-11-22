@@ -54,6 +54,10 @@ export class HomeComponent implements OnInit {
   }
 
   onNextClick() {
-    this.router.navigate(['/scheduling']);
+    let entityCustomer = this.customerForm.getRawValue();
+
+    this.customerService.createOrUpdateCustomer(entityCustomer).subscribe((customerId) => {
+      this.router.navigate([`/scheduling/${customerId}`]);
+    });
   }
 }

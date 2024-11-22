@@ -4,15 +4,37 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+  padding: 20px;
 }
 
 .forms-select {
-  width: 50%;
-  max-width: 100%;
-  margin-bottom: 20px;
+  width: 450px;
+  display: flex;
 }
 
 .button {
-  display: flex;
+  margin-top: 20px;
   justify-content: center;
+  align-items: center;
+}
+
+.demo-inline-calendar-card {
+  width: 450px;
+}
+
+.time-selection {
+  margin-top: 20px;
+}
+
+.span-container {
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.span-scheduling {
+  justify-content: center;
+  display: block;
+  opacity: 0.6;
+  align-items: center;
 }

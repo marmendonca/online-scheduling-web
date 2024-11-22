@@ -1,20 +1,44 @@
 <div class="container">
-  <mat-form-field class="forms-select">
-    <mat-label>Serviços</mat-label>
-    <mat-select [(ngModel)]="selectedService">
-      <mat-option *ngFor="let service of services" [value]="service">
-        {{ service.name }} - {{ service.value | currency }} - Tempo de finalização: {{ service.completionTime }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div *ngIf="showAdditionalFields" class="forms-select">
+  <div [formGroup]="schedulingForm">
     <mat-form-field class="forms-select">
-      <mat-label>Selecione um professional</mat-label>
-      <mat-select [(ngModel)]="selectedProfessional" (openedChange)="onServiceSelect()">
-        <mat-option *ngFor="let professional of professionals" [value]="professional" >
-          {{ professional.name }}
+      <mat-label>Serviços</mat-label>
+      <mat-select formControlName="services" (selectionChange)="onServiceSelect()">
+        <mat-option *ngFor="let serviceItem of services" [value]="serviceItem">
+          {{ serviceItem.name }} - {{ serviceItem.value | currency:'BRL':'symbol':'1.2-2' }} - Tempo de Finalização: {{ serviceItem.completionTime }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div *ngIf="showAdditionalFields">
+      <mat-form-field class="forms-select">
+        <mat-label>Selecione um professional</mat-label>
+        <mat-select formControlName="professionals">
+          <mat-option *ngFor="let professionalItem of professionals" [value]="professionalItem" >
+            {{ professionalItem.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="showAdditionalFields">
+      <mat-card class="demo-inline-calendar-card">
+        <mat-calendar [(selected)]="selectedDate" [minDate]="availableDate?.startAt" [maxDate]="availableDate?.endAt"></mat-calendar>
+      </mat-card>
+    </div>
+    <div *ngIf="selectedDate()" class="time-selection">
+      <mat-form-field class="forms-select">
+        <mat-label>Selecione um horário</mat-label>
+        <mat-select formControlName="time">
+          <mat-option *ngFor="let time of availableTimes" [value]="time" >
+            {{ time }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="span-container">
+      <span class="span-scheduling">Para finalizar o agendamento é cobrado por PIX o valor de R$ 50,00 reais.</span>
+      <span class="span-scheduling">Caso o valor do serviço seja menos, será cobrado 50% do mesmo.</span>
+    </div>
+    <div *ngIf="showAdditionalFields && selectedDate()" class="button">
+      <button mat-flat-button (click)="onConfirmScheduling()">Confirmar Agendamento</button>
+    </div>
   </div>
 </div>

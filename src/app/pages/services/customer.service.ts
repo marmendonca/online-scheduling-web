@@ -18,4 +18,12 @@ export class CustomerService {
       })
     )
   }
+
+  createOrUpdateCustomer(customer: Customer) {
+    return this.httpClient.post<number>(this.url + `v1/customers`, customer).pipe(
+      map((response) => {
+        return response;
+      })
+    )
+  }
 }

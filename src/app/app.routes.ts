@@ -4,5 +4,5 @@ import { SchedulingComponent } from './pages/scheduling/scheduling.component';
 
 export const routes: Routes = [
 { path: '', component: HomeComponent },
-{ path: 'scheduling', component: SchedulingComponent }
+{ path: 'scheduling/:id', component: SchedulingComponent }
 ];
