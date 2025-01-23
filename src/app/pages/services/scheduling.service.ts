@@ -46,12 +46,4 @@ export class SchedulingService {
       })
     )
   }
-
-  createCharge(charge: Charge) : Observable<any> {
-    return this.httpClient.post<any>(this.url + `v1/charges`, charge).pipe(
-      map((response) => {
-        return response;
-      })
-    )
-  }
 }

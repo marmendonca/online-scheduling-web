@@ -2,6 +2,7 @@ import { SchedulingService } from './../services/scheduling.service';
 import { Component, model, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog'; // Adicione esta linha
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { Service } from '../../entities/Service';
@@ -17,6 +18,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Schedule } from '../../entities/Schedule';
 import { ToastrService } from 'ngx-toastr';
 import { Charge } from '../../entities/Charge';
+import { ChargeRequest } from '../../requests/ChargeRequest';
+import { ChargeService } from '../services/charge.service';
+import { ChargeResponse } from '../../responses/ChargeResponse';
 
 
 @Component({
@@ -46,7 +50,13 @@ export class SchedulingComponent {
   availableDate: AvailableDates | null = null;
   availableTimes: string[] = [];
 
-  constructor(private schedulingService: SchedulingService, private route: ActivatedRoute, private toastr: ToastrService) {
+  constructor(
+    private schedulingService: SchedulingService,
+    private chargeService: ChargeService,
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
+    private dialog: MatDialog) {
+
     this.schedulingForm = new FormGroup({
       customer: new FormControl(0),
       services: new FormControl([]),
@@ -124,6 +134,7 @@ export class SchedulingComponent {
   }
 
   async onConfirmScheduling() {
+
     let scheduleId = await this.createSchedule();
     let chargeResponse = this.createCharge(scheduleId);
   }
@@ -142,14 +153,15 @@ export class SchedulingComponent {
       let customerId = this.schedulingForm.controls['customer'].value;
       let selectedDate = this.selectedDate();
 
-      if (!selectedDate) {
-        this.toastr.error('Data não selecionada');
-        reject('Data não selecionada');
+      if (!this.validateSchedulingForm(selectedDate, service, professional))
         return;
-      }
 
       let [hours, minutes] = time.split(':').map(Number);
-      let scheduleDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hours, minutes, 0);
+      let scheduleDate = new Date(
+        selectedDate!.getFullYear(),
+        selectedDate!.getMonth(),
+        selectedDate!.getDate(),
+        hours, minutes, 0);
 
       let schedule = new Schedule(0, new Date(), service.id, customerId, professional.id, scheduleDate);
 
@@ -165,22 +177,48 @@ export class SchedulingComponent {
     });
   }
 
-  createCharge(scheduleId: number) {
+  createCharge(scheduleId: number) : ChargeResponse | null {
     let service = this.schedulingForm.controls['services'].value;
     let chargeValue = 50;
 
     if (service.value < 50)
       chargeValue = service.value * 0.5;
 
-    let charge = new Charge(0, new Date(), scheduleId, chargeValue);
+    let charge = new ChargeRequest(
+      scheduleId,
+      chargeValue,
+      this.schedulingForm.controls['customer'].value);
 
-    this.schedulingService.createCharge(charge).subscribe({
-      next: (chargeResponse) => {
-        console.log(chargeResponse);
+    this.chargeService.createCharge(charge).subscribe({
+      next: (response) => {
+        console.log(response);
+        return response;
       },
       error: () => {
         this.toastr.warning('Erro ao criar cobrança');
       },
     });
+
+    return null;
   }
+
+  validateSchedulingForm(selectedDate: Date | null, service: Service | null, professional: Professional | null) : boolean {
+    if (!selectedDate) {
+      this.toastr.error('Data não selecionada');
+      return false;
+    }
+
+    if (!service) {
+      this.toastr.error('Serviço não selecionado');
+      return false;
+    }
+
+    if (!professional) {
+      this.toastr.error('Profissional não selecionado');
+      return false;
+    }
+
+    return true;
+  }
+
 }
